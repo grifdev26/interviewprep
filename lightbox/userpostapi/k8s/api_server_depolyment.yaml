@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lightbox-posts-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lightbox-posts-app
+  template:
+    metadata:
+      labels:
+        app: lightbox-posts-app
+    spec:
+      containers:
+        - name: lightbox-posts-app
+          image: jlgrif26/lightbox-posts-app:latest
+          command:
+            - "bash"
+            - "-c"
+            - "python manage.py migrate && gunicorn project.wsgi:application --bind 0.0.0.0:8000"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_HOST
+              value: "postgres-db"  # The name of your PostgreSQL service in Kubernetes
+            - name: DATABASE_NAME
+              value: "my_pg_db"
+            - name: DATABASE_USER
+              value: "my_pg_user"
+            - name: DATABASE_PASSWORD
+              value: "my_pg_password"

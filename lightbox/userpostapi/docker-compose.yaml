@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: my_pg_db
+      POSTGRES_USER: my_pg_user
+      POSTGRES_PASSWORD: my_pg_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Reuse the volume for data persistence
+    networks:
+      - mynetwork
+
+  web:
+    build: .
+    container_name: lightbox_posts_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_NAME: my_pg_db
+      DATABASE_USER: my_pg_user
+      DATABASE_PASSWORD: my_pg_password
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+    command: >
+      bash -c "python manage.py migrate && gunicorn project.wsgi:application --bind 0.0.0.0:8000"
+
+volumes:
+  pgdata:  # Named volume that persists data
+
+networks:
+  mynetwork:  # This creates the network 'mynetwork' that services can communicate over

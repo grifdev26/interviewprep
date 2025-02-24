@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          env:
+            - name: POSTGRES_DB
+              value: "my_pg_db"
+            - name: POSTGRES_USER
+              value: "my_pg_user"
+            - name: POSTGRES_PASSWORD
+              value: "my_pg_password"
+            - name: POSTGRES_SHARED_BUFFERS
+              value: "512MB"  # Set shared_buffers to 512Mi
+            - name: POSTGRES_WORK_MEM
+              value: "64MB"  # Set work_mem to 64MB
+            - name: POSTGRES_EFFECTIVE_CACHE_SIZE
+              value: "1GB"  # Set effective_cache_size to 1Gi
+          resources:
+            requests:
+              memory: "1Gi"  # Memory requested for the PostgreSQL container
+              cpu: "500m"    # Half of a CPU core
+            limits:
+              memory: "2Gi"  # Maximum memory allowed for the PostgreSQL container
+              cpu: "1"       # Maximum of 1 CPU core
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
