@@ -1,0 +1,16 @@
+# Python-specific ignores
+*.pyc
+*.pyo
+__pycache__/
+.venv/
+
+# macOS system files
+.DS_Store
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
