@@ -12,7 +12,7 @@ class PostsApiTests(APITestCase):
     def test_get_all_posts(self):
         response = self.client.get(reverse('posts_api'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 7)
+        self.assertEqual(len(response.data['results']), 7)
 
     def test_post_creation(self):
         new_post = {'title': 'A New Post', 'content': 'Some new content', 'user_id':1}

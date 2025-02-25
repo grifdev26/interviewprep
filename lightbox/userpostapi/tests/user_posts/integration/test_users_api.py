@@ -11,7 +11,22 @@ class UsersApiTests(APITestCase):
     def test_get_users(self):
         response = self.client.get(reverse('users_api'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
+        self.assertEqual(len(response.data['results']), 4)
+
+    def test_get_paged_users(self):
+        query_params = {'page': 3, 'page_size': 1}
+        response = self.client.get(reverse('users_api'), query_params=query_params)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 4)
+        self.assertEqual(response.data['next'], 'http://testserver/users/?page=4&page_size=1')
+        self.assertEqual(response.data['previous'],  'http://testserver/users/?page=2&page_size=1')
+        self.assertEqual(len(response.data['results']), 1)
+
+        user_data = response.data['results'][0]
+        self.assertEqual(user_data['id'], 3)
+        self.assertEqual(user_data['name'], 'Bob Wilson')
+        self.assertEqual(user_data['email'], 'bob.wilson@email.com')
 
     def test_user_creation(self):
         response = self.client.post(reverse('users_api'), {'name': 'Jane Jackson', 'email': 'jane@email.com'})

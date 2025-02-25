@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Rest Framework settings
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 50,
+    'PAGE_SIZE_QUERY_PARAM': 'page_size',
+    'MAX_PAGE_SIZE': 500,
+}
 
 # Application definition
 

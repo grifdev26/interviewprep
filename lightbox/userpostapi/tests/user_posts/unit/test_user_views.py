@@ -12,7 +12,7 @@ class UserListViewTest(TestCase):
         request = self.factory.get("/users/")
         response = UserList.as_view()(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 4)
+        self.assertEqual(len(response.data['results']), 4)
 
     def test_create_user(self):
         user_data = {'name': 'Bob Jenkins', 'email': 'bob@email.com'}
