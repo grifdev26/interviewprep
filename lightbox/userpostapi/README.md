@@ -1,5 +1,52 @@
 # UserPosts API Server
 
+A backend REST API for managing users and their posts, implemented as a timed interview exercise to demonstrate backend service design, validation, persistence, testing, and production-oriented thinking.
+
+## Context & Constraints
+
+This project was implemented as part of a timed interview exercise within a startup incubator environment.  
+The goal was to deliver a functional, well-structured backend API under real-world time constraints, prioritizing clarity, correctness, and completeness over exhaustive feature coverage.
+
+While my primary background is in Java-based backend systems, this project was intentionally implemented using Python and Django Rest Framework to demonstrate adaptability and the ability to quickly become productive in a new language and framework.
+
+## What This Project Demonstrates
+
+- REST API design with clear resource boundaries
+- Data modeling and persistence using PostgreSQL
+- Validation and serialization via Django Rest Framework
+- Separation of concerns between views, serializers, and models
+- Unit and integration testing
+- Environment setup for both local development and Docker-based workflows
+- Pragmatic engineering trade-offs under time constraints
+
+## Quick Start (Docker)
+```bash
+docker-compose up --build
+```
+Once started, the API will be available at:
+
+http://localhost:8000
+
+To stop the services:
+```bash
+docker-compose down
+```
+
+## API Endpoints
+
+The API exposes the following resource endpoints:
+
+- `/users` – user management
+- `/posts` – post management
+
+Example:
+
+```bash
+curl http://localhost:8000/users
+```
+
+## Running the API
+
 The following are instructions for deploying and running the UserPosts API server
 
 The UserPosts API Server can be setup and run in the following ways
@@ -14,18 +61,18 @@ Details for each setup will be given below
 
 This section will outline how to run the API server locally in a development environment.
 
-### PostgresSQL Database
+### PostgreSQL Database
 
-The UserPosts API Server utilizes a PostgresSQL Server for its backend storage.
+The UserPosts API Server utilizes a PostgreSQL Server for its backend storage.
 
-The PostgresSQL Database can be run in a local Docker environment
+The PostgreSQL Database can be run in a local Docker environment
 
-- Pull the latest PostgresSQL database image
+- Pull the latest PostgreSQL database image
 ```bash
 docker pull postgres
 ```
 
-- Pull the latest PostgresSQL database image
+- Pull the latest PostgreSQL database image
 ```bash
 docker run --name postgres_local -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=mydatabase -p 5432:5432 -v pgdata:/var/lib/postgresql/data -d postgres
 ```
@@ -64,7 +111,7 @@ Remove the volume pgdata by running
 ```bash
 docker volume rm pgdata
 ```
-And then re-run the docker run to recreate the PostgresSQL Server container
+And then re-run the docker run to recreate the PostgreSQL Server container
 
 
 ### Setup the local environment to run API Server
@@ -115,7 +162,7 @@ python manage.py runserver
 
 ## Running in a local Docker environment
 A second option for running the API server allows you 
-to create and run both the API server and PostgresSQL in a local 
+to create and run both the API server and PostgreSQL in a local 
 Docker container using docker-compose
 
 ### Startup the API server and Database
@@ -124,7 +171,7 @@ From the root directory of the project run the following command
 docker-compose up --build -d
 ```
 This command will rebuild the API server docker image (if necessary).
-And then start both the API server and PostgresSQL database.
+And then start both the API server and PostgreSQL database.
 
 The docker-compose configuration is setup to run the migrations to
 ensure the database is properly setup.
@@ -133,14 +180,14 @@ The database is configured with a data volume to ensure persistence of data
 if the database is restarted.
 
 ### Shutdown the API server and Database
-In order to shutdown both the API Server and PostgresSQL database run the following command
+In order to shutdown both the API Server and PostgreSQL database run the following command
 ```bash
 docker-compose down
 ```
 
 ### Database Persistence
-When using docker-compose to run the API Server and PostgresSQL database a volume named lightbox_pgdata
-gets created within your Docker container.  This allows the PostgresSQL database to restart without losing data.
+When using docker-compose to run the API Server and PostgreSQL database a volume named lightbox_pgdata
+gets created within your Docker container.  This allows the PostgreSQL database to restart without losing data.
 
 If at anypoint you would like to start with fresh data.
 You can remove the volume and re-run the docker-compose up command.
@@ -156,4 +203,15 @@ To run all the unit and integration tests run the following command
 python manage.py test
 ```
 
+## Design Notes & Possible Improvements
+
+Given additional time, the following enhancements would be considered for a production deployment:
+
+- Pagination support for post listings, including total counts and page metadata
+- Endpoint to retrieve all posts for a specific user
+- Authentication and role-based authorization for managing users and posts
+- Optional embedding of user details in post responses (e.g. via an `expandUser` query parameter)
+- Additional validation and constraints around updating post ownership
+- Expanded test coverage for edge cases and failure scenarios
+- Enhanced observability (structured logging, metrics)
 
