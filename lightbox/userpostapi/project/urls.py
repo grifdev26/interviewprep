@@ -18,6 +18,7 @@ from django.urls import path
 
 from apps.user_posts.views import user_views, post_views
 from apps.user_posts.views.post_views import PostList, PostDetail
+from apps.user_posts.views.user_post_views import UserPostList
 from apps.user_posts.views.user_views import UserList, UserDetail
 
 urlpatterns = [
@@ -26,4 +27,7 @@ urlpatterns = [
 
     path('posts/', PostList.as_view(), name="posts_api"),
     path('posts/<int:pk>', PostDetail.as_view(), name="post_detail_api"),
+
+    path('users/<int:user_id>/posts/', UserPostList.as_view(), name='user-posts'),
+
 ]
