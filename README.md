@@ -13,7 +13,6 @@ A REST API for managing users and their posts, implemented using Python and Djan
 - Demonstrates API design, persistence, validation, testing, and Docker-based local execution
 - Includes design notes and potential production improvements
 
-➡️ **Start here:** [`lightbox/userpostsapi`](./lightbox/userpostsapi)
 
 ## Notes
 
